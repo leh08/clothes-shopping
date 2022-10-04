@@ -3,23 +3,36 @@ version: '3.8'
 services:
 
   web:
-    build: ./project/app
+    build: ./project/web
+    command: "npm run start"
+    volumes:
+      - './project/web:/usr/src/app'
+    ports:
+      - 8080:8080
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=8080
+    depends_on:
+      - api
+
+  api:
+    build: ./project/api
     command: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     volumes:
-      - ./project/app:/usr/src/app
+      - ./project/api:/usr/src/app
     ports:
       - 8004:8000
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
-      - DATABASE_URL=postgres://postgres:postgres@web-db:5432/web_dev # new
-      - DATABASE_TEST_URL=postgres://postgres:postgres@web-db:5432/web_test # new
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/web_dev # new
+      - DATABASE_TEST_URL=postgres://postgres:postgres@db:5432/web_test # new
     depends_on:
       # new
-      - web-db
+      - db
 
   # new
-  web-db:
+  db:
     build:
       context: ./project/db
       dockerfile: dockerfile
