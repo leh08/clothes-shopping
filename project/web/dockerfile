@@ -1,5 +1,5 @@
 # Dockerfile
-FROM node:lts-alpine
+FROM --platform=linux/amd64 node:lts-alpine
 
 # create destination directory
 RUN mkdir -p /usr/src/app

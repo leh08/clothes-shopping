@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+  web:
+    image: gianglh0469/clothes-shopping_web
+    command: "npm run start"
+    ports:
+      - 80:80
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=80
+    depends_on:
+      - api
+
+  api:
+    image: gianglh0469/clothes-shopping_api
+    command: "uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 5000"
+    ports:
+      - 5000:5000
+    environment:
+      - ENVIRONMENT=prod
+      - TESTING=0
+      - DATABASE_URL=postgres://postgres:postgres@clothes-shopping-db.cayzhaje6bqt.ap-southeast-2.rds.amazonaws.com:5432/web
+      - DATABASE_TEST_URL=postgres://postgres:postgres@clothes-shopping-db.cayzhaje6bqt.ap-southeast-2.rds.amazonaws.com:5432/web_test

@@ -3,6 +3,7 @@ version: '3.8'
 services:
 
   web:
+    image: gianglh0469/clothes-shopping_web
     build: ./project/web
     command: "npm run start"
     volumes:
@@ -16,12 +17,13 @@ services:
       - api
 
   api:
+    image: gianglh0469/clothes-shopping_api
     build: ./project/api
-    command: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 5000
     volumes:
       - ./project/api:/usr/src/app
     ports:
-      - 8004:8000
+      - 5004:5000
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
@@ -33,6 +35,7 @@ services:
 
   # new
   db:
+    image: gianglh0469/clothes-shopping_db
     build:
       context: ./project/db
       dockerfile: dockerfile
